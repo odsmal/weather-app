@@ -1,3 +1,4 @@
+//use tree shaking when more charts are done
 import Chart from 'chart.js/auto';
 
 const tempGraph = (data) => {
@@ -44,7 +45,7 @@ const tempGraph = (data) => {
 const fetchApi = async () => {
   const temps = [];
   const hours = [];
-
+  //   const arr = [];
   //   console.log(h);
   //   const res = await fetch(
   //     ' https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/17.6320/lat/59.8471/data.json',
@@ -62,9 +63,14 @@ const fetchApi = async () => {
       json.properties.timeseries[i].data.instant.details.air_temperature
     );
     hours.push((h + i) % 24);
+    // arr.push({
+    //   x: json.properties.timeseries[i].data.instant.details.air_temperature,
+    //   y: (h + i) % 24,
+    // });
   }
   //   console.log(airTemp);
   //   console.log(hours);
+  console.log(arr);
   return { temps, hours };
 };
 
