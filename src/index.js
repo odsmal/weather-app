@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 const tempGraph = (data) => {
   const ctx = document.getElementById('myChart');
   const myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'line',
     data: {
       labels: data.hours,
       datasets: [
@@ -44,7 +44,7 @@ const tempGraph = (data) => {
 const fetchApi = async () => {
   const temps = [];
   const hours = [];
-  let h = new Date().getHours();
+
   //   console.log(h);
   //   const res = await fetch(
   //     ' https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/17.6320/lat/59.8471/data.json',
@@ -52,7 +52,10 @@ const fetchApi = async () => {
   //   );
   //   console.log(res);
   //   const json = await res.json();
+
   const json = require('./data2.json');
+  let h = parseInt(json.properties.timeseries[0].time.slice(11, 13)) + 1;
+  //   console.log(animals.slice(2));
   //   const { timeSeries } = json;
   for (let i = 0; i < 12; i++) {
     temps.push(
