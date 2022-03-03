@@ -7,7 +7,7 @@ const myChart = new Chart(ctx, {
     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
     datasets: [
       {
-        label: '# of Votes',
+        // label: '# of Votes',
         data: [12, 19, 3, 5, 2, 3],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -30,6 +30,7 @@ const myChart = new Chart(ctx, {
     ],
   },
   options: {
+    plugins: { legend: { display: false } },
     scales: {
       y: {
         beginAtZero: true,
@@ -37,6 +38,21 @@ const myChart = new Chart(ctx, {
     },
   },
 });
+
+const fetchApi = async () => {
+  //   const res = await fetch(
+  //     ' https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/17.6219/lat/59.8585/data.json',
+  //     { mode: 'cors' }
+  //   );
+  //   console.log(res);
+  //   const json = await res.json();
+  const json = require('./data.json');
+
+  console.log(json);
+};
+
+fetchApi();
+
 // const fetchData = async () => {
 //   try {
 //     const url = `http://api.temperatur.nu/tnu_1.16b.php?lat=58.376761&lon=15.562916&num=2&graph&cli=test_app2`;
@@ -60,4 +76,3 @@ const myChart = new Chart(ctx, {
 //   }
 // };
 // fetchData();
-// hiihio
