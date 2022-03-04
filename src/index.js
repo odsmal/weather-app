@@ -20,6 +20,7 @@ const getDatasets = (data) => {
       backgroundColor: ['rgba(54, 162, 235, 0.2)'],
       borderColor: ['rgba(54, 162, 235, 1)'],
       borderWidth: 1,
+      yAxisID: 'y2',
     },
     {
       type: 'line',
@@ -28,6 +29,7 @@ const getDatasets = (data) => {
       backgroundColor: ['rgba(54, 162, 235, 0.2)'],
       borderColor: ['rgba(54, 162, 235, 1)'],
       borderWidth: 1,
+      yAxisID: 'y',
     },
   ];
   return datasets;
@@ -47,9 +49,24 @@ const getOptions = () => {
     plugins: { legend: { display: false } },
     scales: {
       y: {
-        // min: -20,
-        // max: 20,
-        beginAtZero: true,
+        type: 'linear',
+        position: 'left',
+        ticks: {
+          color: 'black',
+          beginAtZero: true,
+        },
+      },
+      y2: {
+        max: 20,
+        type: 'linear',
+        position: 'right',
+        // reverse: true,
+        ticks: {
+          color: 'blue',
+        },
+        grid: {
+          drawOnChartArea: false,
+        },
       },
     },
   };
