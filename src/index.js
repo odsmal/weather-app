@@ -2,10 +2,11 @@
 import Chart from 'chart.js/auto';
 
 const buildGraph = (data) => {
-  new Chart(getEl('myChart'), {
+  const ctx = getEl('myChart');
+  new Chart(ctx, {
     data: {
       labels: getLabels(data),
-      datasets: getDatasets(data),
+      datasets: getDatasets(data, ctx),
     },
     options: getOptions(),
   });
@@ -24,12 +25,18 @@ const getDatasets = (data) => {
     },
     {
       type: 'line',
+      tension: 0.4,
+      fill: true,
       // label: '# of Votes',
       data: data.temps,
-      backgroundColor: ['rgba(54, 162, 235, 0.2)'],
-      borderColor: ['rgba(54, 162, 235, 1)'],
+      // backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+      // borderColor: ['rgba(54, 162, 235, 1)'],
       borderWidth: 1,
       yAxisID: 'y',
+      segment: {
+        borderColor: (ctx) => (ctx.p0.parsed.y > 0 ? 'red' : 'blue'),
+        backgroundColor: (ctx) => (ctx.p0.parsed.y > 0 ? 'red' : 'blue'),
+      },
     },
   ];
   return datasets;
@@ -49,6 +56,8 @@ const getOptions = () => {
     plugins: { legend: { display: false } },
     scales: {
       y: {
+        min: -15,
+        max: 35,
         type: 'linear',
         position: 'left',
         ticks: {
