@@ -1,50 +1,62 @@
 //use tree shaking when more charts are done
 import Chart from 'chart.js/auto';
 
-const tempGraph = (data) => {
-  const ctx = document.getElementById('myChart');
-  const myChart = new Chart(ctx, {
-    type: 'line',
+const buildGraph = (data) => {
+  new Chart(getEl('myChart'), {
     data: {
-      labels: data.hours,
-      datasets: [
-        {
-          // label: '# of Votes',
-          data: data.temps,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-          ],
-          borderWidth: 1,
-        },
-      ],
+      labels: getLabels(data),
+      datasets: getDatasets(data),
     },
-    options: {
-      plugins: { legend: { display: false } },
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
+    options: getOptions(),
   });
 };
 
-const fetchApi = async () => {
-  const temps = [];
-  const hours = [];
+const getDatasets = (data) => {
+  const datasets = [
+    {
+      type: 'bar',
+      // label: '# of Votes',
+      data: data.precipitation,
+      backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+      borderColor: ['rgba(54, 162, 235, 1)'],
+      borderWidth: 1,
+    },
+    {
+      type: 'line',
+      // label: '# of Votes',
+      data: data.temps,
+      backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+      borderColor: ['rgba(54, 162, 235, 1)'],
+      borderWidth: 1,
+    },
+  ];
+  return datasets;
+};
+
+const getEl = (str) => {
+  return document.getElementById(`${str}`);
+};
+
+const getLabels = (data) => {
+  return data.hours;
+};
+
+const getOptions = () => {
+  const options = {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        // min: -20,
+        // max: 20,
+        beginAtZero: true,
+      },
+    },
+  };
+  return options;
+};
+
+const fetchJson = async () => {
   //   const arr = [];
   //   console.log(h);
   //   const res = await fetch(
@@ -53,14 +65,24 @@ const fetchApi = async () => {
   //   );
   //   console.log(res);
   //   const json = await res.json();
-
   const json = require('./data2.json');
+  return json;
+};
+
+const getData = (json) => {
+  console.log(json);
+  const temps = [];
+  const precipitation = [];
+  const hours = [];
   let h = parseInt(json.properties.timeseries[0].time.slice(11, 13)) + 1;
-  //   console.log(animals.slice(2));
-  //   const { timeSeries } = json;
+
   for (let i = 0; i < 12; i++) {
     temps.push(
       json.properties.timeseries[i].data.instant.details.air_temperature
+    );
+    precipitation.push(
+      json.properties.timeseries[i].data.next_1_hours.details
+        .precipitation_amount
     );
     hours.push((h + i) % 24);
     // arr.push({
@@ -70,19 +92,19 @@ const fetchApi = async () => {
   }
   //   console.log(airTemp);
   //   console.log(hours);
-  console.log(arr);
-  return { temps, hours };
+  // console.log(arr);
+  return { temps, precipitation, hours };
 };
 
 const main = async () => {
-  const data = await fetchApi();
-  //   console.log(fetchedData.temps);
-  tempGraph(data);
+  const json = await fetchJson();
+  const data = getData(json);
+  buildGraph(data);
 };
 
 main();
 
-// const fetchData = async () => {
+// const fetchJson = async () => {
 //   try {
 //     const url = `http://api.temperatur.nu/tnu_1.16b.php?lat=58.376761&lon=15.562916&num=2&graph&cli=test_app2`;
 //     const response = await fetch(url, { mode: 'cors' });
@@ -104,4 +126,4 @@ main();
 //     console.log(err);
 //   }
 // };
-// fetchData();
+// fetchJson();

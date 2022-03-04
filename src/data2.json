@@ -73,7 +73,7 @@
               "symbol_code": "fair_day"
             },
             "details": {
-              "precipitation_amount": 0,
+              "precipitation_amount": 4,
               "precipitation_amount_max": 0,
               "precipitation_amount_min": 0,
               "probability_of_precipitation": 0,
@@ -133,7 +133,7 @@
               "symbol_code": "clearsky_day"
             },
             "details": {
-              "precipitation_amount": 0,
+              "precipitation_amount": 1,
               "precipitation_amount_max": 0,
               "precipitation_amount_min": 0,
               "probability_of_precipitation": 0,
@@ -193,7 +193,7 @@
               "symbol_code": "clearsky_night"
             },
             "details": {
-              "precipitation_amount": 0,
+              "precipitation_amount": 2,
               "precipitation_amount_max": 0,
               "precipitation_amount_min": 0,
               "probability_of_precipitation": 0,
@@ -373,7 +373,7 @@
               "symbol_code": "clearsky_night"
             },
             "details": {
-              "precipitation_amount": 0,
+              "precipitation_amount": 6,
               "precipitation_amount_max": 0,
               "precipitation_amount_min": 0,
               "probability_of_precipitation": 0,
