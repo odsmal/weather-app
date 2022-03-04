@@ -1,3 +1,4 @@
+//npx webpack --watch
 //use tree shaking when more charts are done
 import Chart from 'chart.js/auto';
 
