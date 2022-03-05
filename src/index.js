@@ -23,10 +23,13 @@ class BarLineChart {
     });
   }
 
-  // updateData(hours, datasets){
-  //   this.chart.data.labels = hours;
-  //   this.chart.data.datasets = datasets;
-  // }
+  updateData(hours, precipitation, temps) {
+    this.chart.data.labels = hours;
+    console.log(this.chart.data.datasets[0].data);
+    this.chart.data.datasets[0].data = precipitation;
+    this.chart.data.datasets[1].data = temps;
+    this.chart.update();
+  }
 
   // addData(chart, label, data) {
   //   chart.data.labels.push(this.hours);
@@ -36,16 +39,16 @@ class BarLineChart {
   //   chart.update();
   // }
 
-  removeData(one, two) {
-    console.log(one, two);
-    console.log(this.chart.data.labels);
-    console.log(this.chart.data.datasets);
-    this.chart.data.labels.length = 0;
-    this.chart.data.datasets.forEach((dataset) => {
-      dataset.data.length = 0;
-    });
-    this.chart.update();
-  }
+  // removeData(one, two) {
+  //   console.log(one, two);
+  //   console.log(this.chart.data.labels);
+  //   console.log(this.chart.data.datasets[0].data); //0 is the temps array
+  // this.chart.data.labels.length = 0;
+  // this.chart.data.datasets.forEach((dataset) => {
+  //   dataset.data.length = 0;
+  // });
+  // this.chart.update();
+  // }
 
   getDatasets() {
     return [
@@ -162,7 +165,16 @@ class Main {
     const data = weatherData.getData(json);
     const barLineChart = new BarLineChart(data);
     barLineChart.buildChart();
-    setInterval(barLineChart.removeData.bind(barLineChart, 1, 1), 5000);
+    // setInterval(barLineChart.removeData.bind(barLineChart, 1, 1), 5000);
+    setInterval(
+      barLineChart.updateData.bind(
+        barLineChart,
+        data.hours,
+        data.precipitation,
+        data.temps
+      ),
+      5000
+    );
   }
 }
 
