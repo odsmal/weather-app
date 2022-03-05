@@ -3,6 +3,7 @@
 //linje med annan färg för vind
 //dimensionera för rätt skärmtyp, 16:9? Pixlar?
 //väder på varje temppunkt
+//se om du kan göra en updateData method som föder charten med data. remove data och addData är kanske redundanta..
 import Chart from 'chart.js/auto';
 
 class BarLineChart {
@@ -152,10 +153,10 @@ class WeatherData {
 
 class Main {
   constructor() {
-    this.createChart();
+    this.chart();
   }
 
-  async createChart() {
+  async chart() {
     const weatherData = new WeatherData();
     const json = await weatherData.fetchJson();
     const data = weatherData.getData(json);
