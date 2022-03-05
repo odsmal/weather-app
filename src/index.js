@@ -1,6 +1,64 @@
 //npx webpack --watch
 //use tree shaking when more charts are done
+//linje med annan färg för vind
+//dimensionera för rätt skärmtyp, 16:9? Pixlar?
+//väder på varje temppunkt
 import Chart from 'chart.js/auto';
+
+class BarLineChart {
+  constructor() {}
+}
+
+class DisplayController {
+  constructor() {}
+}
+
+class WeatherData {
+  constructor() {}
+  async fetchJson(url) {
+    //   const res = await fetch(
+    //     ' https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/17.6320/lat/59.8471/data.json',
+    //     { mode: 'cors' }
+    //   );
+    //   console.log(res);
+    //   const json = await res.json();
+    const json = require('./data2.json');
+    return json;
+  }
+  getData(json) {
+    const temps = [];
+    const precipitation = [];
+    const hours = [];
+    let h = parseInt(json.properties.timeseries[0].time.slice(11, 13)) + 1;
+
+    for (let i = 0; i < 12; i++) {
+      temps.push(
+        json.properties.timeseries[i].data.instant.details.air_temperature
+      );
+      precipitation.push(
+        json.properties.timeseries[i].data.next_1_hours.details
+          .precipitation_amount
+      );
+      hours.push((h + i) % 24);
+    }
+    return { temps, precipitation, hours };
+  }
+}
+
+class Main {
+  constructor() {
+    this.updateGraph();
+  }
+  async updateGraph() {
+    const json = await weatherData.fetchJson();
+    const data = weatherData.getData(json);
+    console.log(data);
+    // buildGraph(data);
+  }
+}
+
+const weatherData = new WeatherData();
+const main1 = new Main();
 
 const buildGraph = (data) => {
   const ctx = getEl('myChart');
@@ -129,7 +187,7 @@ const main = async () => {
   buildGraph(data);
 };
 
-main();
+// main();
 
 // const fetchJson = async () => {
 //   try {
