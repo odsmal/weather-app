@@ -3,7 +3,6 @@
 //linje med annan färg för vind
 //dimensionera för rätt skärmtyp, 16:9? Pixlar?
 //väder på varje temppunkt
-//se om du kan göra en updateData method som föder charten med data. remove data och addData är kanske redundanta..
 import Chart from 'chart.js/auto';
 
 class BarLineChart {
@@ -37,15 +36,16 @@ class BarLineChart {
   //   chart.update();
   // }
 
-  // removeData() {
-  //   console.log(this.chart.data.labels);
-  //   console.log(this.chart.data.datasets);
-  //   this.chart.data.labels.length = 0;
-  //   this.chart.data.datasets.forEach((dataset) => {
-  //     dataset.data.length = 0;
-  //   });
-  //   this.chart.update();
-  // }
+  removeData(one, two) {
+    console.log(one, two);
+    console.log(this.chart.data.labels);
+    console.log(this.chart.data.datasets);
+    this.chart.data.labels.length = 0;
+    this.chart.data.datasets.forEach((dataset) => {
+      dataset.data.length = 0;
+    });
+    this.chart.update();
+  }
 
   getDatasets() {
     return [
@@ -153,16 +153,16 @@ class WeatherData {
 
 class Main {
   constructor() {
-    this.chart();
+    this.createChart();
   }
 
-  async chart() {
+  async createChart() {
     const weatherData = new WeatherData();
     const json = await weatherData.fetchJson();
     const data = weatherData.getData(json);
     const barLineChart = new BarLineChart(data);
     barLineChart.buildChart();
-    // setInterval(barLineChart.updateData(data.hours,[data.temps,]).bind(barLineChart), 5000);
+    setInterval(barLineChart.removeData.bind(barLineChart, 1, 1), 5000);
   }
 }
 
