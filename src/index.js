@@ -135,7 +135,7 @@ class Main {
     const chart = new BarLineChart(displayController.getChartEl());
     this.updateChart(chart);
   }
-
+  //fix den här funktionen set interval skicakr gammal data
   async updateChart(chart) {
     const weatherData = new WeatherData();
     const json = await weatherData.fetchJson();
