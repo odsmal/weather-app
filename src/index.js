@@ -6,15 +6,12 @@
 import Chart from 'chart.js/auto';
 
 class BarLineChart {
-  constructor(data) {
-    this.precipitation = data.precipitation;
-    this.temps = data.temps;
-    this.hours = data.hours;
-    this.ctx = displayController.getMyChart();
+  constructor(ctx) {
+    this.buildChart(ctx);
   }
 
-  buildChart() {
-    this.chart = new Chart(this.ctx, {
+  buildChart(ctx) {
+    this.chart = new Chart(ctx, {
       data: {
         labels: this.getLabels(),
         datasets: this.getDatasets(),
@@ -24,38 +21,19 @@ class BarLineChart {
   }
 
   updateData(hours, precipitation, temps) {
+    console.log('hi');
     this.chart.data.labels = hours;
-    console.log(this.chart.data.datasets[0].data);
     this.chart.data.datasets[0].data = precipitation;
     this.chart.data.datasets[1].data = temps;
     this.chart.update();
   }
-
-  // addData(chart, label, data) {
-  //   chart.data.labels.push(this.hours);
-  //   chart.data.datasets.forEach((dataset) => {
-  //     dataset.data.push(data);
-  //   });
-  //   chart.update();
-  // }
-
-  // removeData(one, two) {
-  //   console.log(one, two);
-  //   console.log(this.chart.data.labels);
-  //   console.log(this.chart.data.datasets[0].data); //0 is the temps array
-  // this.chart.data.labels.length = 0;
-  // this.chart.data.datasets.forEach((dataset) => {
-  //   dataset.data.length = 0;
-  // });
-  // this.chart.update();
-  // }
 
   getDatasets() {
     return [
       {
         type: 'bar',
         // label: '# of Votes',
-        data: this.precipitation,
+        // data: this.precipitation,
         backgroundColor: ['rgba(54, 162, 235, 0.2)'],
         borderColor: ['rgba(54, 162, 235, 1)'],
         borderWidth: 1,
@@ -66,7 +44,7 @@ class BarLineChart {
         tension: 0.4,
         fill: true,
         // label: '# of Votes',
-        data: this.temps,
+        // data: this.temps,
         // backgroundColor: ['rgba(54, 162, 235, 0.2)'],
         // borderColor: ['rgba(54, 162, 235, 1)'],
         borderWidth: 1,
@@ -115,11 +93,8 @@ class BarLineChart {
 }
 
 class DisplayController {
-  constructor() {
-    this.myChart = document.getElementById('myChart');
-  }
-  getMyChart() {
-    return this.myChart;
+  getChartEl() {
+    return document.getElementById('chart');
   }
 }
 
@@ -156,29 +131,23 @@ class WeatherData {
 
 class Main {
   constructor() {
-    this.createChart();
+    const displayController = new DisplayController();
+    const chart = new BarLineChart(displayController.getChartEl());
+    this.updateChart(chart);
   }
 
-  async createChart() {
+  async updateChart(chart) {
     const weatherData = new WeatherData();
     const json = await weatherData.fetchJson();
     const data = weatherData.getData(json);
-    const barLineChart = new BarLineChart(data);
-    barLineChart.buildChart();
-    // setInterval(barLineChart.removeData.bind(barLineChart, 1, 1), 5000);
+    chart.updateData(data.hours, data.precipitation, data.temps);
     setInterval(
-      barLineChart.updateData.bind(
-        barLineChart,
-        data.hours,
-        data.precipitation,
-        data.temps
-      ),
+      chart.updateData.bind(chart, data.hours, data.precipitation, data.temps),
       5000
     );
   }
 }
 
-const displayController = new DisplayController();
 const main = new Main();
 
 // const buildGraph = (data) => {
