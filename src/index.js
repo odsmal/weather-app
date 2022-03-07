@@ -21,7 +21,6 @@ class BarLineChart {
   }
 
   updateData(hours, precipitation, temps) {
-    console.log('hi');
     this.chart.data.labels = hours;
     this.chart.data.datasets[0].data = precipitation;
     this.chart.data.datasets[1].data = temps;
@@ -50,8 +49,11 @@ class BarLineChart {
         borderWidth: 1,
         yAxisID: 'y',
         segment: {
-          borderColor: (ctx) => (ctx.p0.parsed.y > 0 ? 'red' : 'blue'),
-          backgroundColor: (ctx) => (ctx.p0.parsed.y > 0 ? 'red' : 'blue'),
+          // borderColor: (ctx) => (ctx.p0.parsed.y > 0 ? 'red' : 'blue'),
+          backgroundColor: (ctx) =>
+            ctx.p0.parsed.y > 0
+              ? 'rgba(360, 63, 73, 0.5)'
+              : 'rgba(141, 166, 229, 0.5)',
         },
       },
     ];
@@ -114,7 +116,6 @@ class WeatherData {
     const temps = [];
     const precipitation = [];
     const hours = [];
-    let h = parseInt(json.properties.timeseries[0].time.slice(11, 13)) + 1;
     for (let i = 0; i < 12; i++) {
       temps.push(
         json.properties.timeseries[i].data.instant.details.air_temperature
@@ -123,7 +124,8 @@ class WeatherData {
         json.properties.timeseries[i].data.next_1_hours.details
           .precipitation_amount
       );
-      hours.push((h + i) % 24);
+      //add +1h for UTC
+      hours.push(json.properties.timeseries[i].time.slice(11, 13)) + 1;
     }
     return { temps, precipitation, hours };
   }
