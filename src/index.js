@@ -4,9 +4,10 @@
 //dimensionera för rätt skärmtyp, 16:9? Pixlar?
 //väder på varje temppunkt
 import Chart from 'chart.js/auto';
-import Sun from './images/clearsky_day.svg';
+import images from './images';
 const sunImage = new Image(35, 35);
-sunImage.src = Sun;
+console.log(images);
+sunImage.src = images.clearsky_day;
 
 class BarLineChart {
   constructor(ctx) {
