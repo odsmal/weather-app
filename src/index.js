@@ -4,6 +4,9 @@
 //dimensionera för rätt skärmtyp, 16:9? Pixlar?
 //väder på varje temppunkt
 import Chart from 'chart.js/auto';
+import Sun from './images/clearsky_day.svg';
+const sunImage = new Image(35, 35);
+sunImage.src = Sun;
 
 class BarLineChart {
   constructor(ctx) {
@@ -22,11 +25,10 @@ class BarLineChart {
   updateData(hour, temp, precipitation, wind, airPressure) {
     this.chart.data.labels = hour;
     this.chart.data.datasets[0].data = temp;
+    this.chart.data.datasets[0].pointStyle = [sunImage, ''];
     this.chart.data.datasets[1].data = precipitation;
     this.chart.data.datasets[2].data = wind;
-    this.chart.data.datasets[2].pointRadius = 0;
     this.chart.data.datasets[3].data = airPressure;
-    this.chart.data.datasets[3].pointRadius = 0;
     this.chart.update();
   }
 
@@ -59,6 +61,7 @@ class BarLineChart {
         //wind
         order: 3,
         type: 'line',
+        pointRadius: 0,
         tension: 0.4,
         yAxisID: 'y',
         segment: {
@@ -67,12 +70,14 @@ class BarLineChart {
       },
       {
         //airPressure
+        order: 4,
         type: 'line',
+        pointRadius: 0,
         tension: 0.4,
         borderDash: [5, 5],
         yAxisID: 'y3',
         segment: {
-          borderColor: 'grey',
+          borderColor: 'rgba(197, 201, 198, 0.9)',
         },
       },
     ];
@@ -112,7 +117,7 @@ class BarLineChart {
           type: 'linear',
           position: 'right',
           ticks: {
-            color: 'grey',
+            color: 'rgba(197, 201, 198, 1)',
             stepSize: 5,
           },
           grid: {
@@ -132,17 +137,17 @@ class DisplayController {
 
 class WeatherData {
   async fetchJson(url) {
-    //   const res = await fetch(
-    //     ' https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/17.6320/lat/59.8471/data.json',
-    //     { mode: 'cors' }
-    //   );
-    //   console.log(res);
-    //   const json = await res.json();
+    // const res = await fetch(
+    //   ' https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/17.6320/lat/59.8471/data.json',
+    //   { mode: 'cors' }
+    // );
+    // const json = await res.json();
     const json = require('./data2.json');
     return json;
   }
 
   getData(json) {
+    // console.log(json);
     const hour = [];
     const temp = [];
     const precipitation = [];
