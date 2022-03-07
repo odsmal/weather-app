@@ -6,8 +6,11 @@
 import Chart from 'chart.js/auto';
 import images from './images';
 const sunImage = new Image(35, 35);
-console.log(images);
 sunImage.src = images.clearsky_day;
+const rainImage = new Image(35, 35);
+rainImage.src = images.heavyrain;
+const night = new Image(35, 35);
+night.src = images.clearsky_night;
 
 class BarLineChart {
   constructor(ctx) {
@@ -26,7 +29,21 @@ class BarLineChart {
   updateData(hour, temp, precipitation, wind, airPressure) {
     this.chart.data.labels = hour;
     this.chart.data.datasets[0].data = temp;
-    this.chart.data.datasets[0].pointStyle = [sunImage, ''];
+    this.chart.data.datasets[0].pointStyle = [
+      rainImage,
+      '',
+      rainImage,
+      '',
+      sunImage,
+      '',
+      night,
+      '',
+      night,
+      '',
+      night,
+      '',
+    ];
+    this.chart.data.datasets[0].pointRotation = [120, 0];
     this.chart.data.datasets[1].data = precipitation;
     this.chart.data.datasets[2].data = wind;
     this.chart.data.datasets[3].data = airPressure;

@@ -373,7 +373,7 @@
               "symbol_code": "clearsky_night"
             },
             "details": {
-              "precipitation_amount": 6,
+              "precipitation_amount": 0,
               "precipitation_amount_max": 0,
               "precipitation_amount_min": 0,
               "probability_of_precipitation": 0,
