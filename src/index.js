@@ -131,20 +131,17 @@ class WeatherData {
 
 class Main {
   constructor() {
-    const displayController = new DisplayController();
-    const chart = new BarLineChart(displayController.getChartEl());
-    this.updateChart(chart);
+    this.displayController = new DisplayController();
+    this.chart = new BarLineChart(this.displayController.getChartEl());
+    this.updateChart();
   }
-  //fix den här funktionen set interval skicakr gammal data
-  async updateChart(chart) {
+
+  async updateChart() {
     const weatherData = new WeatherData();
     const json = await weatherData.fetchJson();
     const data = weatherData.getData(json);
-    chart.updateData(data.hours, data.precipitation, data.temps);
-    setInterval(
-      chart.updateData.bind(chart, data.hours, data.precipitation, data.temps),
-      5000
-    );
+    this.chart.updateData(data.hours, data.precipitation, data.temps);
+    setTimeout(this.updateChart.bind(this), 5000);
   }
 }
 
