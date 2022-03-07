@@ -13,54 +13,59 @@ class BarLineChart {
   buildChart(ctx) {
     this.chart = new Chart(ctx, {
       data: {
-        labels: this.getLabels(),
         datasets: this.getDatasets(),
       },
       options: this.getOptions(),
     });
   }
 
-  updateData(hours, precipitation, temps) {
-    this.chart.data.labels = hours;
-    this.chart.data.datasets[0].data = precipitation;
-    this.chart.data.datasets[1].data = temps;
+  updateData(hour, temp, precipitation, wind, airPressure) {
+    this.chart.data.labels = hour;
+    this.chart.data.datasets[0].data = temp;
+    this.chart.data.datasets[1].data = precipitation;
+    this.chart.data.datasets[2].data = wind;
+    this.chart.data.datasets[3].data = airPressure;
     this.chart.update();
   }
 
   getDatasets() {
     return [
       {
-        type: 'bar',
-        // label: '# of Votes',
-        // data: this.precipitation,
-        backgroundColor: ['rgba(54, 162, 235, 0.2)'],
-        borderColor: ['rgba(54, 162, 235, 1)'],
-        borderWidth: 1,
-        yAxisID: 'y2',
-      },
-      {
         type: 'line',
         tension: 0.4,
         fill: true,
-        // label: '# of Votes',
-        // data: this.temps,
-        // backgroundColor: ['rgba(54, 162, 235, 0.2)'],
-        // borderColor: ['rgba(54, 162, 235, 1)'],
-        borderWidth: 1,
         yAxisID: 'y',
         segment: {
-          // borderColor: (ctx) => (ctx.p0.parsed.y > 0 ? 'red' : 'blue'),
           backgroundColor: (ctx) =>
             ctx.p0.parsed.y > 0
               ? 'rgba(360, 63, 73, 0.5)'
               : 'rgba(141, 166, 229, 0.5)',
         },
       },
+      {
+        type: 'bar',
+        backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+        borderWidth: 1,
+        yAxisID: 'y2',
+      },
+      {
+        type: 'line',
+        tension: 0.4,
+        yAxisID: 'y',
+        segment: {
+          borderColor: 'rgba(141, 229, 166, 0.5)',
+        },
+      },
+      {
+        type: 'line',
+        tension: 0.4,
+        borderDash: [5, 5],
+        yAxisID: 'y3',
+        segment: {
+          borderColor: 'rgba(141, 229, 166, 0.5)',
+        },
+      },
     ];
-  }
-
-  getLabels() {
-    return this.hours;
   }
 
   getOptions() {
@@ -79,11 +84,25 @@ class BarLineChart {
           },
         },
         y2: {
+          min: 0,
           max: 20,
           type: 'linear',
           position: 'right',
           ticks: {
             color: 'blue',
+          },
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+        y3: {
+          min: 930,
+          max: 1070,
+          type: 'linear',
+          position: 'right',
+          ticks: {
+            color: 'blue',
+            stepSize: 10,
           },
           grid: {
             drawOnChartArea: false,
@@ -113,36 +132,49 @@ class WeatherData {
   }
 
   getData(json) {
-    const temps = [];
+    const hour = [];
+    const temp = [];
     const precipitation = [];
-    const hours = [];
+    const wind = [];
+    const airPressure = [];
     for (let i = 0; i < 12; i++) {
-      temps.push(
+      //add +1h for UTC
+      hour.push(parseInt(json.properties.timeseries[i].time.slice(11, 13)) + 1);
+      temp.push(
         json.properties.timeseries[i].data.instant.details.air_temperature
       );
       precipitation.push(
         json.properties.timeseries[i].data.next_1_hours.details
           .precipitation_amount
       );
-      //add +1h for UTC
-      hours.push(json.properties.timeseries[i].time.slice(11, 13)) + 1;
+      wind.push(json.properties.timeseries[i].data.instant.details.wind_speed);
+      airPressure.push(
+        json.properties.timeseries[i].data.instant.details
+          .air_pressure_at_sea_level
+      );
     }
-    return { temps, precipitation, hours };
+    return { hour, temp, precipitation, wind, airPressure };
   }
 }
 
 class Main {
   constructor() {
+    this.weatherData = new WeatherData();
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
     this.updateChart();
   }
 
   async updateChart() {
-    const weatherData = new WeatherData();
-    const json = await weatherData.fetchJson();
-    const data = weatherData.getData(json);
-    this.chart.updateData(data.hours, data.precipitation, data.temps);
+    const json = await this.weatherData.fetchJson();
+    const data = this.weatherData.getData(json);
+    this.chart.updateData(
+      data.hour,
+      data.temp,
+      data.precipitation,
+      data.wind,
+      data.airPressure
+    );
     setTimeout(this.updateChart.bind(this), 5000);
   }
 }
