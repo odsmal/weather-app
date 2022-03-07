@@ -24,16 +24,21 @@ class BarLineChart {
     this.chart.data.datasets[0].data = temp;
     this.chart.data.datasets[1].data = precipitation;
     this.chart.data.datasets[2].data = wind;
+    this.chart.data.datasets[2].pointRadius = 0;
     this.chart.data.datasets[3].data = airPressure;
+    this.chart.data.datasets[3].pointRadius = 0;
     this.chart.update();
   }
 
   getDatasets() {
     return [
       {
+        //temp
+        order: 2,
         type: 'line',
         tension: 0.4,
         fill: true,
+        borderWidth: 0,
         yAxisID: 'y',
         segment: {
           backgroundColor: (ctx) =>
@@ -43,12 +48,16 @@ class BarLineChart {
         },
       },
       {
+        //precipitation
+        order: 1,
         type: 'bar',
-        backgroundColor: ['rgba(54, 162, 235, 0.2)'],
-        borderWidth: 1,
+        backgroundColor: 'rgba(54, 162, 235, 0.3)',
+        borderWidth: 0,
         yAxisID: 'y2',
       },
       {
+        //wind
+        order: 3,
         type: 'line',
         tension: 0.4,
         yAxisID: 'y',
@@ -57,12 +66,13 @@ class BarLineChart {
         },
       },
       {
+        //airPressure
         type: 'line',
         tension: 0.4,
         borderDash: [5, 5],
         yAxisID: 'y3',
         segment: {
-          borderColor: 'rgba(141, 229, 166, 0.5)',
+          borderColor: 'grey',
         },
       },
     ];
@@ -74,6 +84,7 @@ class BarLineChart {
       plugins: { legend: { display: false } },
       scales: {
         y: {
+          //temp & wind
           min: -15,
           max: 35,
           type: 'linear',
@@ -84,25 +95,25 @@ class BarLineChart {
           },
         },
         y2: {
+          //precipitation
           min: 0,
-          max: 20,
+          max: 16,
           type: 'linear',
           position: 'right',
           ticks: {
-            color: 'blue',
+            color: 'rgba(54, 162, 235, 0.8)',
           },
           grid: {
             drawOnChartArea: false,
           },
         },
         y3: {
-          min: 930,
-          max: 1070,
+          //airPressure
           type: 'linear',
           position: 'right',
           ticks: {
-            color: 'blue',
-            stepSize: 10,
+            color: 'grey',
+            stepSize: 5,
           },
           grid: {
             drawOnChartArea: false,
