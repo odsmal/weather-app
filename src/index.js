@@ -39,6 +39,7 @@ class BarLineChart {
         //temp
         order: 2,
         type: 'line',
+        pointRadius: 0.1,
         tension: 0.4,
         fill: true,
         borderWidth: 0,
@@ -154,6 +155,7 @@ class WeatherData {
     const precipitation = [];
     const wind = [];
     const airPressure = [];
+    // const img = [];
     for (let i = 0; i < 12; i++) {
       //add +1h for UTC
       hour.push(parseInt(json.properties.timeseries[i].time.slice(11, 13)) + 1);
@@ -169,6 +171,9 @@ class WeatherData {
         json.properties.timeseries[i].data.instant.details
           .air_pressure_at_sea_level
       );
+      // const img = new Image(35, 35);
+      // const str = json.properties.timeseries[i].data.next_1_hours.summary.symbol_code;
+      // img.src = images.str;
     }
     return { hour, temp, precipitation, wind, airPressure };
   }
