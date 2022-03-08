@@ -1,8 +1,6 @@
 //npx webpack --watch
 //use tree shaking when more charts are done
-//linje med annan färg för vind
 //dimensionera för rätt skärmtyp, 16:9? Pixlar?
-//väder på varje temppunkt
 import Chart from 'chart.js/auto';
 import images from './images';
 
