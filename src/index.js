@@ -5,13 +5,6 @@
 //väder på varje temppunkt
 import Chart from 'chart.js/auto';
 import images from './images';
-const sunImage = new Image(35, 35);
-sunImage.src = images.clearsky_day;
-const rainImage = new Image(35, 35);
-rainImage.src = images.heavyrain;
-const night = new Image(35, 35);
-night.src = images.clearsky_night;
-console.log([night]);
 
 class BarLineChart {
   constructor(ctx) {
@@ -27,14 +20,24 @@ class BarLineChart {
     });
   }
 
-  updateData(hour, temp, precipitation, wind, airPressure, weatherImg) {
-    console.log(weatherImg);
+  updateData(
+    hour,
+    temp,
+    precipitation,
+    wind,
+    airPressure,
+    weatherImg,
+    windArrow,
+    windDirection
+  ) {
+    console.log(windDirection);
     this.chart.data.labels = hour;
     this.chart.data.datasets[0].data = temp;
-    this.chart.data.datasets[0].pointStyle = weatherImg[0];
-    this.chart.data.datasets[0].pointRotation = [120, 0];
+    this.chart.data.datasets[0].pointStyle = weatherImg;
     this.chart.data.datasets[1].data = precipitation;
     this.chart.data.datasets[2].data = wind;
+    this.chart.data.datasets[2].pointStyle = windArrow;
+    this.chart.data.datasets[2].pointRotation = windDirection;
     this.chart.data.datasets[3].data = airPressure;
     this.chart.update();
   }
@@ -69,7 +72,7 @@ class BarLineChart {
         //wind
         order: 3,
         type: 'line',
-        pointRadius: 0,
+        pointRadius: 0.1,
         tension: 0.4,
         yAxisID: 'y',
         segment: {
@@ -155,12 +158,15 @@ class WeatherData {
   }
 
   getData(json) {
+    console.log(json);
     const hour = [];
     const temp = [];
     const precipitation = [];
     const wind = [];
     const airPressure = [];
     const weatherImg = [];
+    const windArrow = [];
+    const windDirection = [];
     for (let i = 0; i < 12; i++) {
       //add +1h for UTC
       hour.push(parseInt(json.properties.timeseries[i].time.slice(11, 13)) + 1);
@@ -176,17 +182,35 @@ class WeatherData {
         json.properties.timeseries[i].data.instant.details
           .air_pressure_at_sea_level
       );
-      // const img = new Image(35, 35);
-      // const str = json.properties.timeseries[i].data.next_1_hours.summary.symbol_code;
-      // img.src = images.str;
-
-      const img = new Image(35, 35);
-      const str =
-        json.properties.timeseries[i].data.next_1_hours.summary.symbol_code;
-      img.src = images[str];
-      weatherImg.push(img);
+      if (i % 2 === 0) {
+        const img = new Image(35, 35);
+        img.src =
+          images[
+            json.properties.timeseries[i].data.next_1_hours.summary.symbol_code
+          ];
+        weatherImg.push(img);
+        windArrow.push('');
+        windDirection.push('');
+      } else {
+        const img = new Image(20, 20);
+        weatherImg.push('');
+        img.src = images.icon_arrow;
+        windArrow.push(img);
+        windDirection.push(
+          json.properties.timeseries[i].data.instant.details.wind_from_direction
+        );
+      }
     }
-    return { hour, temp, precipitation, wind, airPressure, weatherImg };
+    return {
+      hour,
+      temp,
+      precipitation,
+      wind,
+      airPressure,
+      weatherImg,
+      windArrow,
+      windDirection,
+    };
   }
 }
 
@@ -207,7 +231,9 @@ class Main {
       data.precipitation,
       data.wind,
       data.airPressure,
-      data.weatherImg
+      data.weatherImg,
+      data.windArrow,
+      data.windDirection
     );
     // setTimeout(this.updateChart.bind(this), 5000);
   }
