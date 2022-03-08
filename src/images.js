@@ -81,7 +81,7 @@ import snowshowersandthunder_polartwilight from './images/snowshowersandthunder_
 import snowshowers_day from './images/snowshowers_day.svg';
 import snowshowers_night from './images/snowshowers_night.svg';
 import snowshowers_polartwilight from './images/snowshowers_polartwilight.svg';
-import icon_arrow from './images/icon-arrow.svg';
+import icon_arrow from './images/icon_arrow.svg';
 
 export default {
   clearsky_day: clearsky_day,

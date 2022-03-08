@@ -11,6 +11,7 @@ const rainImage = new Image(35, 35);
 rainImage.src = images.heavyrain;
 const night = new Image(35, 35);
 night.src = images.clearsky_night;
+console.log([night]);
 
 class BarLineChart {
   constructor(ctx) {
@@ -26,23 +27,11 @@ class BarLineChart {
     });
   }
 
-  updateData(hour, temp, precipitation, wind, airPressure) {
+  updateData(hour, temp, precipitation, wind, airPressure, weatherImg) {
+    console.log(weatherImg);
     this.chart.data.labels = hour;
     this.chart.data.datasets[0].data = temp;
-    this.chart.data.datasets[0].pointStyle = [
-      rainImage,
-      '',
-      rainImage,
-      '',
-      sunImage,
-      '',
-      night,
-      '',
-      night,
-      '',
-      night,
-      '',
-    ];
+    this.chart.data.datasets[0].pointStyle = weatherImg[0];
     this.chart.data.datasets[0].pointRotation = [120, 0];
     this.chart.data.datasets[1].data = precipitation;
     this.chart.data.datasets[2].data = wind;
@@ -166,13 +155,12 @@ class WeatherData {
   }
 
   getData(json) {
-    // console.log(json);
     const hour = [];
     const temp = [];
     const precipitation = [];
     const wind = [];
     const airPressure = [];
-    // const img = [];
+    const weatherImg = [];
     for (let i = 0; i < 12; i++) {
       //add +1h for UTC
       hour.push(parseInt(json.properties.timeseries[i].time.slice(11, 13)) + 1);
@@ -191,8 +179,14 @@ class WeatherData {
       // const img = new Image(35, 35);
       // const str = json.properties.timeseries[i].data.next_1_hours.summary.symbol_code;
       // img.src = images.str;
+
+      const img = new Image(35, 35);
+      const str =
+        json.properties.timeseries[i].data.next_1_hours.summary.symbol_code;
+      img.src = images[str];
+      weatherImg.push(img);
     }
-    return { hour, temp, precipitation, wind, airPressure };
+    return { hour, temp, precipitation, wind, airPressure, weatherImg };
   }
 }
 
@@ -212,9 +206,10 @@ class Main {
       data.temp,
       data.precipitation,
       data.wind,
-      data.airPressure
+      data.airPressure,
+      data.weatherImg
     );
-    setTimeout(this.updateChart.bind(this), 5000);
+    // setTimeout(this.updateChart.bind(this), 5000);
   }
 }
 
