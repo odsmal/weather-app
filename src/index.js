@@ -146,17 +146,16 @@ class DisplayController {
 
 class WeatherData {
   async fetchJson(url) {
-    // const res = await fetch(
-    //   ' https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/17.6320/lat/59.8471/data.json',
-    //   { mode: 'cors' }
-    // );
-    // const json = await res.json();
+    //   const res = await fetch(
+    //     ' https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389',
+    //     { mode: 'cors' }
+    //   );
+    //   const json = await res.json();
     const json = require('./data2.json');
     return json;
   }
 
   getData(json) {
-    console.log(json);
     const hour = [];
     const temp = [];
     const precipitation = [];
