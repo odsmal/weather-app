@@ -139,7 +139,7 @@ class BarLineChart {
 
 class DisplayController {
   getChartEl() {
-    return document.getElementById('chart');
+    return document.getElementsByClassName('chart');
   }
 }
 
