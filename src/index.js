@@ -27,7 +27,6 @@ class BarLineChart {
     windArrow,
     windDirection
   ) {
-    console.log(windDirection);
     this.chart.data.labels = hour;
     this.chart.data.datasets[0].data = temp;
     this.chart.data.datasets[0].pointStyle = weatherImg;
