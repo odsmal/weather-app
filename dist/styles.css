@@ -16,8 +16,8 @@ body {
 .temp-container {
   grid-area: temp;
 }
-.hi-container {
-  grid-area: hi;
+.empty-container {
+  grid-area: empty;
 }
 .time-container {
   grid-area: time;
@@ -35,7 +35,7 @@ body {
   width: 1280px;
   display: grid;
   grid-template-areas:
-    'temp hi time map'
+    'temp empty time map'
     'chart chart chart map';
   gap: 26px;
   /* overflow: hidden; */
@@ -57,7 +57,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.hi-container {
+.empty-container {
   justify-self: right;
   align-self: flex-end;
   height: 165px;
@@ -91,4 +91,6 @@ body {
 .radar-map {
   grid-column-start: first-col;
   grid-row-start: first-row;
+
+  clip-path: ellipse(700px 745px at 100% 100%);
 }
