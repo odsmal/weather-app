@@ -15,17 +15,42 @@
   margin: 0;
   /* font-size: 10px; */
 }
-
-.grid-container {
-  display: grid;
-  gap: 26px;
-  grid-template-columns: 278px, 1fr, 278px, 382px;
+.temp-container {
+  grid-area: temp;
+}
+.hi-container {
+  grid-area: hi;
+}
+.time-container {
+  grid-area: time;
+}
+.chart-container {
+  grid-area: chart;
+}
+.map-container {
+  grid-area: map;
 }
 
-.info-container {
+.grid-container {
+  height: 720px;
+  width: 1280px;
+  display: grid;
+  grid-template-areas:
+    'temp hi time map'
+    'chart chart chart map';
+  gap: 26px;
+  /* grid-template-columns: 274px, 243px, 274px, 382px;
+  grid-template-rows: 165px, 467px; */
+
+  /* grid-template-columns: auto auto auto auto; */
+}
+
+.temp-container,
+.hi-container,
+.time-container {
   background-color: #793d91;
   height: 165px;
-  width: 278px;
+  width: 274px;
 }
 .chart-container {
   height: 467px;

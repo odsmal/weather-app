@@ -94,6 +94,7 @@ class BarLineChart {
   getOptions() {
     return {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
         y: {
