@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900);
+
 /* :root {
   --font-color: #eee;
   --font-color-dark: #aaa;
@@ -13,8 +15,10 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  /* font-size: 10px; */
+  font-size: 10px;
+  font-family: 'Roboto', sans-serif;
 }
+
 .temp-container {
   grid-area: temp;
 }
@@ -32,6 +36,7 @@
 }
 
 .grid-container {
+  background-image: url(./background_img.png);
   height: 720px;
   width: 1280px;
   display: grid;
@@ -39,29 +44,42 @@
     'temp hi time map'
     'chart chart chart map';
   gap: 26px;
-  /* grid-template-columns: 274px, 243px, 274px, 382px;
-  grid-template-rows: 165px, 467px; */
-
-  /* grid-template-columns: auto auto auto auto; */
+  /* overflow: hidden; */
 }
 
 .temp-container,
-.hi-container,
 .time-container {
-  background-color: #793d91;
+  color: hsla(0, 0%, 38%, 1);
+  font-size: 9.6rem;
+  justify-self: right;
+  align-self: flex-end;
+  border-radius: 10px 10px 10px 10px;
+  background-color: hsla(0, 0%, 100%, 0.95);
   height: 165px;
-  width: 274px;
+  width: 330px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hi-container {
+  justify-self: right;
+  align-self: flex-end;
+  height: 165px;
+  width: 80px;
 }
 .chart-container {
+  justify-self: right;
+  align-self: top;
+  border-radius: 10px 10px 10px 10px;
+  background-color: hsla(0, 0%, 100%, 0.95);
+  padding: 20px;
   height: 467px;
-  width: 847px;
+  width: 845px;
 }
 .map-container {
   /* position: relative; */
   height: 720px;
-  width: 382px;
-  /* background-color: blue; */
-  /* overflow: hidden; */
+  width: 373px;
   filter: drop-shadow(0px 4px 8px #4e87b1);
 }
 .map-container img {
