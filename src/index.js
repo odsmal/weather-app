@@ -141,14 +141,19 @@ class BarLineChart {
 class DisplayController {
   constructor() {
     this.radarImage = document.getElementById('radar-map');
+    this.radarTimeStamp = document.getElementById('radar-map-timestamp');
     this.chart = document.getElementById('chart');
+    this.tempCard = document.getElementById('temp-container');
   }
   getChartEl() {
     return this.chart;
   }
   updateRadarImage(timeStamp, imageURL) {
-    console.log(timeStamp);
     this.radarImage.src = imageURL;
+    this.radarTimeStamp.innerText = timeStamp;
+  }
+  updateTempCard(temp) {
+    this.tempCard.innerText = `${temp}°`;
   }
 }
 
@@ -249,7 +254,7 @@ class Main {
     this.weatherData = new WeatherData();
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
-    // this.updateChart(chartURL);
+    this.updateChart(chartURL);
     // this.updateMap(mapURL);
   }
 
@@ -275,12 +280,10 @@ class Main {
       data.windArrow,
       data.windDirection
     );
+    this.displayController.updateTempCard(data.temp[0]);
     // setTimeout(this.updateChart.bind(this), 5000);
   }
 }
-
-//sätt timestamp över smhi
-//gör egen skala för radarbild? http://opendata-download-radar.smhi.se/explore/
 
 const chartURL =
   'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389';

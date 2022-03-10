@@ -44,8 +44,8 @@ body {
   align-items: right;
 }
 
-.temp-container,
-.time-container {
+#temp-container,
+#time-container {
   font-size: 9.6rem;
   /* justify-self: right; */
   border-radius: 10px 10px 10px 10px;
@@ -57,7 +57,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.empty-container {
+#empty-container {
   justify-self: right;
   align-self: flex-end;
   height: 165px;
