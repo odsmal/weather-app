@@ -144,6 +144,7 @@ class DisplayController {
     this.radarTimeStamp = document.getElementById('radar-map-timestamp');
     this.chart = document.getElementById('chart');
     this.tempCard = document.getElementById('temp-container');
+    this.timeCard = document.getElementById('time-container');
   }
   getChartEl() {
     return this.chart;
@@ -154,6 +155,9 @@ class DisplayController {
   }
   updateTempCard(temp) {
     this.tempCard.innerText = `${temp}°`;
+  }
+  updateTimeCard(h, m) {
+    this.timeCard.innerText = `${h}:${m}`;
   }
 }
 
@@ -250,15 +254,27 @@ class WeatherData {
 }
 
 class Main {
-  constructor(chartURL, mapURL) {
+  constructor() {
     this.weatherData = new WeatherData();
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
-    // this.updateChart(chartURL);
-    // this.updateMap(mapURL);
+    this.updateChart();
+    this.updateMap();
+    this.updateTime();
   }
 
-  async updateMap(mapURL) {
+  updateTime() {
+    const today = new Date();
+    const h = today.getHours();
+    let m = today.getMinutes();
+    if (m < 10) m = `0${m}`;
+    this.displayController.updateTimeCard(h, m);
+    setTimeout(this.updateTime.bind(this), 1000);
+  }
+
+  async updateMap() {
+    const mapURL =
+      'https://opendata-download-radar.smhi.se/api/version/latest/area/sweden/product/comp?format=png&timeZone=Europe/Stockholm';
     const response = await this.weatherData.fetch(mapURL);
     const json = await this.weatherData.getJSON(response);
     const data = this.weatherData.getRadarImage(json);
@@ -266,7 +282,9 @@ class Main {
     // setTimeout(this.updateMap.bind(this), 5000);
   }
 
-  async updateChart(chartURL) {
+  async updateChart() {
+    const chartURL =
+      'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389';
     const response = await this.weatherData.fetch(chartURL);
     const json = await this.weatherData.getJSON(response);
     const data = this.weatherData.getChartData(json);
@@ -285,8 +303,4 @@ class Main {
   }
 }
 
-const chartURL =
-  'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389';
-const mapURL =
-  'https://opendata-download-radar.smhi.se/api/version/latest/area/sweden/product/comp?format=png&timeZone=Europe/Stockholm';
-new Main(chartURL, mapURL);
+new Main();
