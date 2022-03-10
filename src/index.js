@@ -183,7 +183,7 @@ class WeatherData {
     // });
     // const blob = await res.blob();
     // const objectURL = URL.createObjectURL(blob);
-    const timeStamp = json.lastFiles[0].formats[0].updated;
+    const timeStamp = json.lastFiles[0].formats[0].updated.slice(11, 16);
     const imageURL = json.lastFiles[0].formats[0].link;
     return { timeStamp, imageURL };
   }
