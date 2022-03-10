@@ -157,7 +157,6 @@ class WeatherData {
     const res = await fetch(url, { mode: 'cors' });
     const json = await res.json();
     // const json = require('./data.json');
-
     return json;
   }
 
@@ -270,5 +269,12 @@ class Main {
     // setTimeout(this.updateChart.bind(this), 5000);
   }
 }
+
+//lägg urlerna här ute och lägg som argument för new Main
+//refaktorera fetch/json/blob
+//lägg in try/catch där det behövs
+//sätt timestamp över smhi
+//gör egen skala för radarbild? http://opendata-download-radar.smhi.se/explore/
+//
 
 const main = new Main();
