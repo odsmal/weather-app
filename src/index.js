@@ -146,35 +146,46 @@ class DisplayController {
   getChartEl() {
     return this.chart;
   }
-  updateRadarImage(timeStamp, objectURL) {
+  updateRadarImage(timeStamp, imageURL) {
     console.log(timeStamp);
-    this.radarImage.src = objectURL;
+    this.radarImage.src = imageURL;
   }
 }
 
 class WeatherData {
-  async fetchJson(url) {
-    const res = await fetch(url, { mode: 'cors' });
-    const json = await res.json();
-    // const json = require('./data.json');
-    return json;
+  async fetch(url) {
+    try {
+      const response = await fetch(url, { mode: 'cors' });
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  async getRadarImage(json) {
-    console.log(json);
+  async getJSON(response) {
+    try {
+      const json = await response.json();
+      // const json = require('./data.json');
+      return json;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  getRadarImage(json) {
     // const y = json.files;
     // const lastX = 37;
     // const res = y.filter((val, index, arr) => index > arr.length - lastX - 1);
     // console.log(res);
     // console.log(res[0].formats[0].link);
+    // const res = await fetch(json.lastFiles[0].formats[0].link, {
+    //   mode: 'cors',
+    // });
+    // const blob = await res.blob();
+    // const objectURL = URL.createObjectURL(blob);
     const timeStamp = json.lastFiles[0].formats[0].updated;
-
-    const res = await fetch(json.lastFiles[0].formats[0].link, {
-      mode: 'cors',
-    });
-    const blob = await res.blob();
-    const objectURL = URL.createObjectURL(blob);
-    return { timeStamp, objectURL };
+    const imageURL = json.lastFiles[0].formats[0].link;
+    return { timeStamp, imageURL };
   }
 
   getChartData(json) {
@@ -238,19 +249,21 @@ class Main {
     this.weatherData = new WeatherData();
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
-    this.updateChart(chartURL);
-    this.updateMap(mapURL);
+    // this.updateChart(chartURL);
+    // this.updateMap(mapURL);
   }
 
-  async updateMap(url) {
-    const json = await this.weatherData.fetchJson(url);
-    const data = await this.weatherData.getRadarImage(json);
-    this.displayController.updateRadarImage(data.timeStamp, data.objectURL);
+  async updateMap(mapURL) {
+    const response = await this.weatherData.fetch(mapURL);
+    const json = await this.weatherData.getJSON(response);
+    const data = this.weatherData.getRadarImage(json);
+    this.displayController.updateRadarImage(data.timeStamp, data.imageURL);
     // setTimeout(this.updateMap.bind(this), 5000);
   }
 
-  async updateChart(url) {
-    const json = await this.weatherData.fetchJson(url);
+  async updateChart(chartURL) {
+    const response = await this.weatherData.fetch(chartURL);
+    const json = await this.weatherData.getJSON(response);
     const data = this.weatherData.getChartData(json);
     this.chart.updateData(
       data.hour,
@@ -266,14 +279,11 @@ class Main {
   }
 }
 
-//lägg urlerna här ute och lägg som argument för new Main
-//refaktorera fetch/json/blob
-//lägg in try/catch där det behövs
 //sätt timestamp över smhi
 //gör egen skala för radarbild? http://opendata-download-radar.smhi.se/explore/
-//
+
 const chartURL =
   'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389';
 const mapURL =
   'https://opendata-download-radar.smhi.se/api/version/latest/area/sweden/product/comp?format=png&timeZone=Europe/Stockholm';
-const main = new Main(chartURL, mapURL);
+new Main(chartURL, mapURL);
