@@ -39,7 +39,7 @@ body {
     'temp empty time map'
     'chart chart chart map';
   gap: 26px;
-  /* overflow: hidden; */
+  overflow: hidden;
   justify-content: right;
   align-items: right;
 }
@@ -47,7 +47,7 @@ body {
 .temp-container,
 .time-container {
   font-size: 9.6rem;
-  justify-self: right;
+  /* justify-self: right; */
   border-radius: 10px 10px 10px 10px;
   background-color: hsla(0, 0%, 100%, 0.95);
   height: 165px;
@@ -84,13 +84,22 @@ body {
   max-height: 100%;
 }
 
-#base-map {
-  grid-column-start: first-col;
-  grid-row-start: first-row;
+#radar-map-timestamp {
+  margin-top: 1px;
+  margin-left: 10px;
+  height: 50px;
+  width: 100px;
+  background-color: hsla(205, 31%, 71%, 1);
+  color: hsla(206, 39%, 75%, 1);
+  font-size: 1.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#radar-map {
+
+#base-map,
+#radar-map,
+#radar-map-timestamp {
   grid-column-start: first-col;
   grid-row-start: first-row;
-
-  /* clip-path: ellipse(700px 745px at 100% 100%); */
 }
