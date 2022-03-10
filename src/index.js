@@ -234,26 +234,22 @@ class WeatherData {
 }
 
 class Main {
-  constructor() {
+  constructor(chartURL, mapURL) {
     this.weatherData = new WeatherData();
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
-    // this.updateChart();
-    // this.updateMap();
+    this.updateChart(chartURL);
+    this.updateMap(mapURL);
   }
 
-  async updateMap() {
-    const url =
-      'https://opendata-download-radar.smhi.se/api/version/latest/area/sweden/product/comp?format=png&timeZone=Europe/Stockholm';
+  async updateMap(url) {
     const json = await this.weatherData.fetchJson(url);
     const data = await this.weatherData.getRadarImage(json);
     this.displayController.updateRadarImage(data.timeStamp, data.objectURL);
     // setTimeout(this.updateMap.bind(this), 5000);
   }
 
-  async updateChart() {
-    const url =
-      'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389';
+  async updateChart(url) {
     const json = await this.weatherData.fetchJson(url);
     const data = this.weatherData.getChartData(json);
     this.chart.updateData(
@@ -276,5 +272,8 @@ class Main {
 //sätt timestamp över smhi
 //gör egen skala för radarbild? http://opendata-download-radar.smhi.se/explore/
 //
-
-const main = new Main();
+const chartURL =
+  'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389';
+const mapURL =
+  'https://opendata-download-radar.smhi.se/api/version/latest/area/sweden/product/comp?format=png&timeZone=Europe/Stockholm';
+const main = new Main(chartURL, mapURL);
