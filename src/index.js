@@ -139,20 +139,51 @@ class BarLineChart {
 }
 
 class DisplayController {
+  constructor() {
+    this.radarImage = document.getElementById('radar-map');
+  }
   getChartEl() {
     return document.getElementById('chart');
+  }
+  updateRadarImage(timeStamp, objectURL) {
+    console.log(timeStamp);
+    this.radarImage.src = objectURL;
   }
 }
 
 class WeatherData {
   async fetchJson(url) {
-    //   const res = await fetch(
-    //     ' https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389',
-    //     { mode: 'cors' }
-    //   );
-    //   const json = await res.json();
-    const json = require('./data2.json');
+    // const res = await fetch(
+    //   'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389',
+    //   { mode: 'cors' }
+    // );
+    // const json = require('./data2.json');
+
+    const res = await fetch(url, { mode: 'cors' });
+    const json = await res.json();
+    // const json = require('./data.json');
+
     return json;
+  }
+
+  async getRadarImage(json) {
+    console.log(json);
+    // const imgSlot = document.getElementById('radar-map');
+    // imgSlot.src = 'newSource.png';
+
+    // const y = json.files;
+    // const lastX = 37;
+    // const res = y.filter((val, index, arr) => index > arr.length - lastX - 1);
+    // console.log(res);
+    // console.log(res[0].formats[0].link);
+    const timeStamp = json.lastFiles[0].formats[0].updated;
+
+    const res = await fetch(json.lastFiles[0].formats[0].link, {
+      mode: 'cors',
+    });
+    const blob = await res.blob();
+    const objectURL = URL.createObjectURL(blob);
+    return { timeStamp, objectURL };
   }
 
   getData(json) {
@@ -217,10 +248,22 @@ class Main {
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
     this.updateChart();
+    this.updateMap();
+  }
+
+  async updateMap() {
+    const url =
+      'https://opendata-download-radar.smhi.se/api/version/latest/area/sweden/product/comp?format=png&timeZone=Europe/Stockholm';
+    const json = await this.weatherData.fetchJson(url);
+    const data = await this.weatherData.getRadarImage(json);
+    this.displayController.updateRadarImage(data.timeStamp, data.objectURL);
+    // setTimeout(this.updateChart.bind(this), 5000);
   }
 
   async updateChart() {
-    const json = await this.weatherData.fetchJson();
+    const url =
+      'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389';
+    const json = await this.weatherData.fetchJson(url);
     const data = this.weatherData.getData(json);
     this.chart.updateData(
       data.hour,
