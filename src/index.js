@@ -141,9 +141,10 @@ class BarLineChart {
 class DisplayController {
   constructor() {
     this.radarImage = document.getElementById('radar-map');
+    this.chart = document.getElementById('chart');
   }
   getChartEl() {
-    return document.getElementById('chart');
+    return this.chart;
   }
   updateRadarImage(timeStamp, objectURL) {
     console.log(timeStamp);
@@ -153,12 +154,6 @@ class DisplayController {
 
 class WeatherData {
   async fetchJson(url) {
-    // const res = await fetch(
-    //   'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389',
-    //   { mode: 'cors' }
-    // );
-    // const json = require('./data2.json');
-
     const res = await fetch(url, { mode: 'cors' });
     const json = await res.json();
     // const json = require('./data.json');
@@ -168,9 +163,6 @@ class WeatherData {
 
   async getRadarImage(json) {
     console.log(json);
-    // const imgSlot = document.getElementById('radar-map');
-    // imgSlot.src = 'newSource.png';
-
     // const y = json.files;
     // const lastX = 37;
     // const res = y.filter((val, index, arr) => index > arr.length - lastX - 1);
@@ -186,7 +178,7 @@ class WeatherData {
     return { timeStamp, objectURL };
   }
 
-  getData(json) {
+  getChartData(json) {
     const hour = [];
     const temp = [];
     const precipitation = [];
@@ -247,8 +239,8 @@ class Main {
     this.weatherData = new WeatherData();
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
-    this.updateChart();
-    this.updateMap();
+    // this.updateChart();
+    // this.updateMap();
   }
 
   async updateMap() {
@@ -257,14 +249,14 @@ class Main {
     const json = await this.weatherData.fetchJson(url);
     const data = await this.weatherData.getRadarImage(json);
     this.displayController.updateRadarImage(data.timeStamp, data.objectURL);
-    // setTimeout(this.updateChart.bind(this), 5000);
+    // setTimeout(this.updateMap.bind(this), 5000);
   }
 
   async updateChart() {
     const url =
       'https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=59.8586&lon=17.6389';
     const json = await this.weatherData.fetchJson(url);
-    const data = this.weatherData.getData(json);
+    const data = this.weatherData.getChartData(json);
     this.chart.updateData(
       data.hour,
       data.temp,
