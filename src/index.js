@@ -254,7 +254,7 @@ class Main {
     this.weatherData = new WeatherData();
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
-    this.updateChart(chartURL);
+    // this.updateChart(chartURL);
     // this.updateMap(mapURL);
   }
 
