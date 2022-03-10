@@ -11,6 +11,7 @@
 }
 body {
   background-color: grey;
+  color: hsla(0, 0%, 38%, 1);
 }
 
 .temp-container {
@@ -30,7 +31,7 @@ body {
 }
 
 .grid-container {
-  background-image: url(./background_img.png);
+  background-image: url(images/background_img.png);
   height: 720px;
   width: 1280px;
   display: grid;
@@ -45,7 +46,6 @@ body {
 
 .temp-container,
 .time-container {
-  color: hsla(0, 0%, 38%, 1);
   font-size: 9.6rem;
   justify-self: right;
   border-radius: 10px 10px 10px 10px;
