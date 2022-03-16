@@ -1,4 +1,8 @@
-# Todo
+# Weather app
+
+Description
+
+## Todo
 
 - gör egen skala för radarbild?
 - dark mode
