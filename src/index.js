@@ -279,7 +279,7 @@ class Main {
     const json = await this.weatherData.getJSON(response);
     const data = this.weatherData.getRadarImage(json);
     this.displayController.updateRadarImage(data.timeStamp, data.imageURL);
-    // setTimeout(this.updateMap.bind(this), 5000);
+    setTimeout(this.updateMap.bind(this), 300000);
   }
 
   async updateChart() {
@@ -299,7 +299,7 @@ class Main {
       data.windDirection
     );
     this.displayController.updateTempCard(data.temp[0]);
-    // setTimeout(this.updateChart.bind(this), 5000);
+    setTimeout(this.updateChart.bind(this), 300000);
   }
 }
 
