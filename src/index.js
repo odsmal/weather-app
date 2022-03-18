@@ -1,5 +1,5 @@
 import './styles.css';
-import Chart from 'chart.js/auto'; //use tree shaking when done
+import Chart from 'chart.js/auto';
 import images from './images';
 
 class BarLineChart {
@@ -256,8 +256,8 @@ class Main {
     this.weatherData = new WeatherData();
     this.displayController = new DisplayController();
     this.chart = new BarLineChart(this.displayController.getChartEl());
-    this.updateChart();
-    this.updateMap();
+    // this.updateChart();
+    // this.updateMap();
     this.updateTime();
   }
 

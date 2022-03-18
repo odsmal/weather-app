@@ -84,6 +84,10 @@ body {
   max-height: 100%;
 }
 
+#base-map {
+  content: url(images/base_map.png);
+}
+
 #radar-map-timestamp {
   margin-top: 1px;
   margin-left: 10px;
